@@ -24,6 +24,8 @@ public class Login extends JFrame {
 	private JTextField textField_1;
 	static String username;
 	static String password;
+	Managerfirst managerfirst;
+	Salesfirst salesfirst;
 	/**
 	 * Launch the application.
 	 * 
@@ -105,10 +107,29 @@ public class Login extends JFrame {
 
 					dispose();
 					System.out.println(OO.validation_of_user(username, password));
-					//HW10_Paint hw10_Paint = new HW10_Paint();
-					//hw10_Paint.setVisible(true);
+					try{
+					Managerfirst managerfirst = new Managerfirst ();
+					managerfirst.setVisible(true);
+					}
+					catch (Exception e) {
+						e.printStackTrace();
+					}
 
 				}
+				
+				 else if (OO.validation_of_user(username, password).equals("SalesOperator")){
+
+						dispose();
+						System.out.println(OO.validation_of_user(username, password));
+						try{
+							Salesfirst salesfirst = new Salesfirst ();
+							salesfirst.setVisible(true);
+						}
+						catch (Exception e) {
+							e.printStackTrace();
+						}
+
+					}
 
 				
 

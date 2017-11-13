@@ -82,7 +82,30 @@ public class Drog {
 		this.insurances = insurances;
 	}
 	
+	@OneToMany(mappedBy = "drog") 
+ 	private Set<PatientDrog> patients = new HashSet<PatientDrog>(); 
 	
+	
+	public Set<PatientDrog> getPatients() {
+		return patients;
+	}
+
+
+	public void setPatients(Set<PatientDrog> patients) {
+		this.patients = patients;
+	}
+	
+	
+	@OneToMany(mappedBy = "drog") 
+ 	private Set<SaleDrug> sales = new HashSet<SaleDrug>(); 
+	public Set<SaleDrug> getSales() {
+		return sales;
+	}
+
+
+	public void setSales(Set<SaleDrug> sales) {
+		this.sales = sales;
+	}
 	public Drog(Integer id,String name,int price,int inventory){
 		this.inventory=inventory;
 		this.id=id;
@@ -93,5 +116,11 @@ public class Drog {
 	public Drog(){
 		
 	}
+	
+	public Drog(Integer id,int price){
+		this.id=id;
+		this.price=price;
+	}
+	
 
 }

@@ -2,9 +2,11 @@ package frameClass;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.HeadlessException;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -12,8 +14,11 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import HibernateManager.DrogInsuranceManager;
 import HibernateManager.DrogManager;
 import HibernateManager.InsuranceManager;
+import javaClass.Drog;
+import javaClass.Insurance;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -37,31 +42,37 @@ public class Managerfirst extends JFrame {
 	private JTextField textField_5;
 	private JTextField textField_6;
 	private JTextField textField_7;
-	private JTextField textField_8;
 	private JTextField textField_9;
 	private JTextField textField_10;
 	private JTextField textField_11;
 
 	JTable table_2;
 	DefaultTableModel model;
-	
+
 	JTable table_3;
 	DefaultTableModel model1;
+
+	JTable table_4;
+	DefaultTableModel model2;
+
+	CriticalDrugs criticalDrugs ;
+	SaleFullDrug saleFullDrug;
+
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Managerfirst frame = new Managerfirst();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	//	public static void main(String[] args) {
+	//		EventQueue.invokeLater(new Runnable() {
+	public void run() {
+		try {
+			Managerfirst frame = new Managerfirst();
+			frame.setVisible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
+	//		});
+	//	}
 
 	/**
 	 * Create the frame.
@@ -69,6 +80,7 @@ public class Managerfirst extends JFrame {
 	 */
 	public Managerfirst() throws SQLException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 		setBounds(100, 100, 1200, 700);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -85,13 +97,36 @@ public class Managerfirst extends JFrame {
 		lblUsername.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblUsername.setBounds(1096, 247, 67, 14);
 		contentPane.add(lblUsername);
+
+		//Critical drugs
 		JButton button = new JButton("\u062F\u0627\u0631\u0648\u0647\u0627\u06CC \u0628\u062D\u0631\u0627\u0646\u06CC");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try{
+					CriticalDrugs criticalDrugs=new CriticalDrugs();
+					criticalDrugs.setVisible(true);
+				}
+				catch(Exception ee){
+
+				}
+
+			}
+		});
 		button.setBounds(1043, 43, 120, 30);
 		contentPane.add(button);
 
+
+		//Saledrugs drugs
 		JButton button_1 = new JButton("\u062F\u0627\u0631\u0648\u0647\u0627\u06CC \u067E\u0631 \u0641\u0631\u0648\u0634");
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try{
+					SaleFullDrug saleFullDrug=new SaleFullDrug();
+					saleFullDrug.setVisible(true);
+				}
+				catch(Exception ee){
+
+				}
 			}
 		});
 		button_1.setBounds(1043, 96, 120, 30);
@@ -110,15 +145,57 @@ public class Managerfirst extends JFrame {
 		textField_1.setBounds(946, 272, 86, 20);
 		contentPane.add(textField_1);
 
+		//Edit Insurances
 		button_3 = new JButton("\u0648\u06CC\u0631\u0627\u06CC\u0634 \u0628\u06CC\u0645\u0647");
 		button_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(textField.getText().equals("") || textField_1.getText().equals("")){
+					JOptionPane.showMessageDialog(contentPane, "Please insert the id and type of the insurance to update!");
+				}
+				else{
+					try {
+						Integer id=Integer.parseInt(textField.getText());
+						String type=textField_1.getText();
+						Insurance edit=new Insurance(id,type);
+						InsuranceManager II=new InsuranceManager();
+
+						if(!II.uodateOneInsurance(edit)){
+							JOptionPane.showMessageDialog(contentPane, "The Insurance you want to update does not exist!");
+						}
+					} catch (Exception e1) {
+						e1.printStackTrace();
+						JOptionPane.showMessageDialog(contentPane, "Insert a number as the insurance Id!");
+					} 
+				}
+
 			}
 		});
 		button_3.setBounds(1068, 322, 95, 23);
 		contentPane.add(button_3);
 
+		//deleting an insurance
 		button_4 = new JButton("\u062D\u0630\u0641 \u0628\u06CC\u0645\u0647");
+		button_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				if(textField.getText().equals("")){
+					JOptionPane.showMessageDialog(contentPane, "Please insert the id of the insurance to delete!");
+				}
+				else{
+					try {
+						Integer id=Integer.parseInt(textField.getText());
+						InsuranceManager II=new InsuranceManager();
+
+						if(!II.deleteOneInsurance(id)){
+							JOptionPane.showMessageDialog(contentPane, "The Insurance you want to delete does not exist!");
+						}
+					} catch (Exception e1) {
+						e1.printStackTrace();
+						JOptionPane.showMessageDialog(contentPane, "Insert a number as the insurance Id!");
+					} 
+				}	
+			}
+		});
 		button_4.setBounds(937, 322, 95, 23);
 		contentPane.add(button_4);
 
@@ -132,7 +209,7 @@ public class Managerfirst extends JFrame {
 		label_1.setBounds(1063, 219, 100, 14);
 		contentPane.add(label_1);
 
-		JLabel label_2 = new JLabel("\u0648\u06CC\u0631\u0627\u06CC\u0634 \u0648 \u062D\u0630\u0641 \u062F\u0627\u0631\u0648");
+		JLabel label_2 = new JLabel("\u0648\u06CC\u0631\u0627\u06CC\u0634 \u062F\u0627\u0631\u0648");
 		label_2.setHorizontalAlignment(SwingConstants.RIGHT);
 		label_2.setBounds(1063, 379, 100, 14);
 		contentPane.add(label_2);
@@ -142,7 +219,7 @@ public class Managerfirst extends JFrame {
 		label_3.setBounds(1096, 404, 67, 14);
 		contentPane.add(label_3);
 
-		JLabel label_4 = new JLabel("\u0646\u0627\u0645 \u062F\u0627\u0631\u0648");
+		JLabel label_4 = new JLabel("\u0642\u06CC\u0645\u062A \u062F\u0627\u0631\u0648");
 		label_4.setHorizontalAlignment(SwingConstants.RIGHT);
 		label_4.setBounds(964, 404, 67, 14);
 		contentPane.add(label_4);
@@ -160,7 +237,7 @@ public class Managerfirst extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 		panel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		panel.setBounds(565, -54, 1184, 661);
+		panel.setBounds(576, -54, 1184, 661);
 		contentPane.add(panel);
 
 		textField_4 = new JTextField();
@@ -233,23 +310,32 @@ public class Managerfirst extends JFrame {
 		textField_7.setBounds(946, 429, 86, 20);
 		panel.add(textField_7);
 
-		JLabel label_11 = new JLabel("\u0642\u06CC\u0645\u062A \u062F\u0627\u0631\u0648");
-		label_11.setHorizontalAlignment(SwingConstants.RIGHT);
-		label_11.setBounds(295, 459, 67, 14);
-		panel.add(label_11);
-
-		textField_8 = new JTextField();
-		textField_8.setColumns(10);
-		textField_8.setBounds(276, 482, 86, 20);
-		panel.add(textField_8);
-
+		//Editing a Drug  price
 		JButton button_10 = new JButton("\u0648\u06CC\u0631\u0627\u06CC\u0634 \u062F\u0627\u0631\u0648");
+		button_10.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(textField_2.getText().equals("") || textField_3.getText().equals("")){
+					JOptionPane.showMessageDialog(contentPane, "Please insert the id and price of the drug to update!");
+				}
+				else{
+					try {
+						Integer id=Integer.parseInt(textField_2.getText());
+						Integer price=Integer.parseInt(textField_3.getText());
+						Drog edit=new Drog(id,price);
+						DrogManager II=new DrogManager();
+
+						if(!II.updateOneDrug(edit)){
+							JOptionPane.showMessageDialog(contentPane, "The Drug you want to update does not exist!");
+						}
+					} catch (Exception e1) {
+						e1.printStackTrace();
+						JOptionPane.showMessageDialog(contentPane, "Insert a number as the drug Id and price!");
+					} 
+				}
+			}
+		});
 		button_10.setBounds(504, 528, 95, 23);
 		panel.add(button_10);
-
-		JButton button_11 = new JButton("\u062D\u0630\u0641 \u062F\u0627\u0631\u0648");
-		button_11.setBounds(373, 528, 95, 23);
-		panel.add(button_11);
 
 		JLabel label_12 = new JLabel("\u0648\u06CC\u0631\u0627\u06CC\u0634 \u0633\u0647\u0645 \u0628\u06CC\u0645\u0647");
 		label_12.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -286,7 +372,33 @@ public class Managerfirst extends JFrame {
 		textField_11.setBounds(277, 632, 86, 20);
 		panel.add(textField_11);
 
+		//editing insurance share
 		JButton button_12 = new JButton("\u0648\u06CC\u0631\u0627\u06CC\u0634 \u0633\u0647\u0645 \u0628\u06CC\u0645\u0647");
+		button_12.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(textField_9.getText().equals("") || textField_10.getText().equals("") 
+						|| textField_11.getText().equals("")){
+					JOptionPane.showMessageDialog(contentPane, "Please insert the Drug_id, Insurance_id and share of insurance to update!");
+				}
+				else{
+					try {
+						Integer DrugID=Integer.parseInt(textField_9.getText());
+						Integer InsuranceID=Integer.parseInt(textField_10.getText());
+						Integer Share=Integer.parseInt(textField_11.getText());
+
+						DrogInsuranceManager II=new DrogInsuranceManager();
+
+						if(!II.updateOneDrugInsurance(DrugID, InsuranceID, Share)){
+							JOptionPane.showMessageDialog(contentPane, "The Field you want to update does not exist!");
+						}
+					} catch (Exception e1) {
+						e1.printStackTrace();
+						JOptionPane.showMessageDialog(contentPane, "Insert a number as Drug_id, Insurance_id and share of insurance!");
+					} 
+				}		
+
+			}
+		});
 		button_12.setBounds(1043, 618, 120, 23);
 		contentPane.add(button_12);
 
@@ -295,39 +407,90 @@ public class Managerfirst extends JFrame {
 				"Id", "Name","Inventory", "Price"  };
 		DrogManager DD=new DrogManager();
 		Object[][] data =DD.ShowDrogs();
-    	model = new DefaultTableModel(data,columns);
+		model = new DefaultTableModel(data,columns);
 		table_2 = new JTable(model);
 		table_2.setBounds(10, 10, 175, 200);
+
 		//size of Drug table
 		table_2.getColumnModel().getColumn(0).setPreferredWidth(400);
 		table_2.getColumnModel().getColumn(1).setPreferredWidth(400);
 		table_2.getColumnModel().getColumn(2).setPreferredWidth(400);
 		table_2.getColumnModel().getColumn(3).setPreferredWidth(400);
-    	//
+
 		JScrollPane	pane = new JScrollPane(table_2);
 		pane.setBorder(BorderFactory.createTitledBorder ("Drugs"));
-		pane.setSize(260, 129);
-		pane.setLocation(43, 51);
+		pane.setSize(260, 600);
+		pane.setLocation(43, 21);
 		contentPane.add(pane);
-		
+
 		//Table of Insurances
-				String[] columns2 = new String[] {
-						"Id", "Type"  };
-				InsuranceManager DD2=new InsuranceManager();
-				Object[][] data2 =DD2.ShowInsurances();
-		    	model1 = new DefaultTableModel(data2,columns2);
-				table_3 = new JTable(model1);
-				table_3.setBounds(300, 10, 175, 200);
-				
-				//size of Insurance table
-				table_3.getColumnModel().getColumn(0).setPreferredWidth(400);
-				table_3.getColumnModel().getColumn(1).setPreferredWidth(400);
-				
-		    	//
-				JScrollPane	pane2 = new JScrollPane(table_3);
-				pane2.setBorder(BorderFactory.createTitledBorder ("Insurances"));
-				pane2.setSize(260, 129);
-				pane2.setLocation(343, 51);
-				contentPane.add(pane2);
+		String[] columns2 = new String[] {
+				"Id", "Type"  };
+		InsuranceManager DD2=new InsuranceManager();
+		Object[][] data2 =DD2.ShowInsurances();
+		model1 = new DefaultTableModel(data2,columns2);
+		table_3 = new JTable(model1);
+		table_3.setBounds(300, 10, 175, 200);
+
+		//size of Insurance table
+		table_3.getColumnModel().getColumn(0).setPreferredWidth(100);
+		table_3.getColumnModel().getColumn(1).setPreferredWidth(400);
+
+		//
+		JScrollPane	pane2 = new JScrollPane(table_3);
+		pane2.setBorder(BorderFactory.createTitledBorder ("Insurances"));
+		pane2.setSize(200, 329);
+		pane2.setLocation(34, 77);
+		panel.add(pane2);
+
+
+
+		//Table of DrogInsurances
+		String[] columns3 = new String[] {
+				"Drog ID", "Insurance ID" ,"Share Percent" };
+		DrogInsuranceManager DD3=new  DrogInsuranceManager();
+		Object[][] data3 =DD3.ShowDrogInsurance();
+		model2 = new DefaultTableModel(data3,columns3);
+		table_4 = new JTable(model2);
+		table_4.setBounds(300, 10, 175, 200);
+
+		//size of Insurance table
+		table_4.getColumnModel().getColumn(0).setPreferredWidth(180);
+		table_4.getColumnModel().getColumn(1).setPreferredWidth(180);
+		table_4.getColumnModel().getColumn(2).setPreferredWidth(200);
+
+		//
+		JScrollPane	pane3 = new JScrollPane(table_4);
+		pane3.setBorder(BorderFactory.createTitledBorder ("Insurances share for each drog"));
+		pane3.setSize(248, 600);
+		pane3.setLocation(327, 21);
+		contentPane.add(pane3);
+
+		//Inserting a new Insurance
+		JButton button_13 = new JButton("\u0627\u0641\u0632\u0648\u062F\u0646 \u0628\u06CC\u0645\u0647");
+		button_13.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(textField.getText().equals("") || textField_1.getText().equals("")){
+					JOptionPane.showMessageDialog(contentPane, "Please insert the id and type of the insurance to insert a new insurance!");
+				}
+				else{
+					try {
+						Integer id=Integer.parseInt(textField.getText());
+						String type=textField_1.getText();
+						Insurance insert=new Insurance(id,type);
+						InsuranceManager II=new InsuranceManager();
+						if(!II.insertInsurance(insert)){
+							JOptionPane.showMessageDialog(contentPane, "The Insurance you want to insert exist in the table!");
+						}
+					} catch (Exception e1) {
+						e1.printStackTrace();
+						JOptionPane.showMessageDialog(contentPane, "Insert a number as the insurance Id!");
+					} 
+				}
+
+			}
+		});
+		button_13.setBounds(240, 375, 95, 23);
+		panel.add(button_13);
 	}
 }

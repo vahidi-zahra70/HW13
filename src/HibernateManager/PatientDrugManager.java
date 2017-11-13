@@ -114,10 +114,10 @@ public class PatientDrugManager {
 			tx = session.beginTransaction();
 			Patient p=session.get(Patient.class, PatientID);
 			Drog d=session.get(Drog.class, DrugID);
-			if(p!=null && d!=null){
+			if(p!=null && d!=null ){
 				double pershare = 0;
 
-				String date=p.getDate();
+				java.sql.Date  date=p.getDate();
 				int price=d.getPrice();
 				Integer insuranceID=p.getPatientInsurance().getId();
 				String hql = "SELECT share FROM DrogInsurance E "
@@ -136,11 +136,15 @@ public class PatientDrugManager {
 
 				if(session.get(PatientDrog.class, CC.getId())==null){
 					session.save(CC); 
+					System.out.println(CC.getDate());
 					System.out.println("successfully saved"); 
 					is_exist=true;
-
+					tx.commit();
+					SaleDrugManager  II3=new SaleDrugManager ();
+					II3.insertSaleDrug(DrugID, quantity, date);
+					
 				}
-				tx.commit();
+
 			}
 		}catch (HibernateException e) {
 			if (tx!=null) tx.rollback();

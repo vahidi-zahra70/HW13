@@ -130,12 +130,12 @@ public class PatientDrog {
 		this.quantity = quantity;
 	}
 	@Column
-	private String date;
+	private java.sql.Date  date;
 	
-	public String getDate() {
+	public java.sql.Date getDate() {
 		return date;
 	}
-	public void setDate(String date) {
+	public void setDate(java.sql.Date  date) {
 		this.date = date;
 	}
 	
@@ -148,7 +148,7 @@ public class PatientDrog {
 	public void setInsuranceID(Integer insuranceID) {
 		this.insuranceID = insuranceID;
 	}
-	public PatientDrog( Patient p, Drog d,int quantity,Integer insuranceID, int share,int cost,String date) { 
+	public PatientDrog( Patient p, Drog d,int quantity,Integer insuranceID, int share,int cost,java.sql.Date  date) { 
 		// create primary key 
 		this.id = new PatientDrogId(p.getId(), d.getId()); 
 
@@ -168,7 +168,7 @@ public class PatientDrog {
 
 
 	}
-	public PatientDrog( Patient p, Drog d,int quantity,String date) { 
+	public PatientDrog( Patient p, Drog d,int quantity,java.sql.Date  date) { 
 		// create primary key 
 		this.id = new PatientDrogId(p.getId(), d.getId()); 
 

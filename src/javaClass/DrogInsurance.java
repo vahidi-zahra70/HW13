@@ -26,9 +26,27 @@ import javax.persistence.ManyToOne;
  		protected Integer drogId; 
 
  
- 		@Column(name = "fk_insurance") 
+ 		public Integer getDrogId() {
+			return drogId;
+		}
+
+		public void setDrogId(Integer drogId) {
+			this.drogId = drogId;
+		}
+
+		
+
+
+		@Column(name = "fk_insurance") 
 		protected Integer insuranceId; 
- 
+		
+		public Integer getInsuranceId() {
+			return insuranceId;
+		}
+
+		public void setInsuranceId(Integer insuranceId) {
+			this.insuranceId = insuranceId;
+		}
  
 		public DrogInsuranceId() { 
 			 
@@ -80,7 +98,7 @@ import javax.persistence.ManyToOne;
  	}
  	
  	@EmbeddedId 
- 		private DrogInsuranceId id; 
+ 	private DrogInsuranceId id; 
  	public DrogInsuranceId getId(){
  		return id;
  	}
@@ -98,11 +116,11 @@ import javax.persistence.ManyToOne;
  	 
 
  	    @Column
- 	    private int share;
- 	    public int getShare() {
+ 	    private double share;
+ 	    public double getShare() {
 			return share;
 		}
-		public void setShare(int share) {
+		public void setShare(double share) {
 			this.share = share;
 		}
  	 
@@ -119,7 +137,7 @@ import javax.persistence.ManyToOne;
 			this.insurance = insurance;
 		}
 		
-		public DrogInsurance( Drog b, Insurance p, int share) { 
+		public DrogInsurance( Drog b, Insurance p, double share) { 
  	 		// create primary key 
  	 		this.id = new DrogInsuranceId(b.getId(), p.getId()); 
  			 

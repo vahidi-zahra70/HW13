@@ -5,7 +5,7 @@
 <hibernate-configuration>  
 
   <session-factory>  
-       <property name="hbm2ddl.auto">create</property>  
+       <property name="hbm2ddl.auto">update</property>  
         <property name="dialect">
          org.hibernate.dialect.MySQL5Dialect</property>  
         <property name="show_sql">
@@ -14,7 +14,7 @@
          
        
          <property name="connection.driver_class">com.mysql.jdbc.Driver</property>  
-       <property name="connection.url">jdbc:mysql://localhost/hw13test</property>  
+       <property name="connection.url">jdbc:mysql://localhost/hw13</property>  
        <property name="connection.username">root</property>  
        <property name="connection.password"></property>  
        
@@ -22,6 +22,10 @@
      <mapping class="javaClass.Insurance"/> 
       <mapping class="javaClass.DrogInsurance"/>
       <mapping class="javaClass.User"/>  
+      <mapping class="javaClass.Patient"/>
+      <mapping class="javaClass.PatientDrog"/>
+        <mapping class="javaClass.SaleDrug"/>
+     
       
    </session-factory>  
  

@@ -13,10 +13,16 @@ public class UserManager {
 	Configuration cfg=null;
 	SessionFactory factory=null;
 
-	{
-		cfg= new Configuration(); 
-		cfg.configure("hibernate.cfg.xml");
-		factory=cfg.buildSessionFactory();
+	{ try{
+		DBManager DD=new DBManager();
+		cfg=DD.getconn();
+		factory=DD.getfactory();
+	}
+	catch (Exception e) {
+		
+		e.printStackTrace(); 
+	}
+	
 	}
 	public String validation_of_user(String username,String password){
 		String position="NotExist";
@@ -30,8 +36,6 @@ public class UserManager {
 				position=user.getPosition();
 				
 			}
-			
-			 
 			tx.commit();
 		}catch (HibernateException e) {
 			if (tx!=null) tx.rollback();

@@ -12,21 +12,28 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import javaClass.Drog;
 import javaClass.DrogInsurance;
 import javaClass.Insurance;
 
 public class DrogInsuranceManager {
-	
+
 	Configuration cfg=null;
 	SessionFactory factory=null;
 
-	{
-		cfg= new Configuration(); 
-		cfg.configure("hibernate.cfg.xml");
-		factory=cfg.buildSessionFactory();
+	{ try{
+		DBManager DD=new DBManager();
+		cfg=DD.getconn();
+		factory=DD.getfactory();
 	}
-	
-	
+	catch (Exception e) {
+
+		e.printStackTrace(); 
+	}
+
+	}
+
+
 	public Object [][] ShowDrogInsurance( ) throws SQLException {
 		Object[][] data = null;
 		Session session = factory.openSession();
@@ -42,12 +49,12 @@ public class DrogInsuranceManager {
 				Droginsurance.add(emp);
 			}
 			tx.commit();
-			
-		    data =new Object[Droginsurance.size()][2];
+
+			data =new Object[Droginsurance.size()][3];
 			for(int i=0;i<Droginsurance.size();i++){
-				data[i][0]=Droginsurance.get(i).getDrog();
-				//data[i][1]=Droginsurance.get(i).
-	
+				data[i][0]=Droginsurance.get(i).getId().getDrogId();
+				data[i][1]=Droginsurance.get(i).getId().getInsuranceId();
+				data[i][2]=Droginsurance.get(i).getShare();
 			}
 
 		}catch (HibernateException e) {
@@ -58,7 +65,45 @@ public class DrogInsuranceManager {
 		}
 		return data;
 	}
-	
-	
+
+
+	//Edit a DrugInsurance
+	public boolean updateOneDrugInsurance(Integer DrugID,Integer InsuranceID,int Share) throws SQLException{
+
+		boolean is_exist=false;
+		Session session = factory.openSession();
+		Transaction tx = null;
+		Insurance insurance;
+		Drog drug;
+		try{
+			tx = session.beginTransaction();
+			insurance=new Insurance();
+			insurance=	session.get(Insurance.class, InsuranceID);
+
+			drug=new Drog();
+			drug=session.get(Drog.class, DrugID);
+
+			if(	insurance!=null && drug!=null){
+				DrogInsurance bp2 = new DrogInsurance(drug, insurance, Share);
+				DrogInsurance bp3=session.get(DrogInsurance.class, bp2.getId());
+				if(bp3!=null){
+					bp3.setShare(Share);
+					session.update(bp3);
+					is_exist=true;
+					System.out.println("successfully update"); 
+				}
+			}
+			tx.commit();
+		}catch (HibernateException e) {
+			if (tx!=null) tx.rollback();
+			e.printStackTrace(); 
+		}finally {
+			session.close(); 
+		}
+		return is_exist;
+	}
+
+
+
 
 }

@@ -10,11 +10,11 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-
 import javaClass.Drog;
 import javaClass.Insurance;
 
@@ -24,13 +24,18 @@ public class InsuranceManager {
 	Configuration cfg=null;
 	SessionFactory factory=null;
 
-	{
-		cfg= new Configuration(); 
-		cfg.configure("hibernate.cfg.xml");
-		factory=cfg.buildSessionFactory();
+	{ try{
+		DBManager DD=new DBManager();
+		cfg=DD.getconn();
+		factory=DD.getfactory();
+	}
+	catch (Exception e) {
+		
+		e.printStackTrace(); 
 	}
 	
-	
+	}
+	//show all insurances
 	public Object [][] ShowInsurances( ) throws SQLException {
 		Object[][] data = null;
 		Session session = factory.openSession();
@@ -63,7 +68,127 @@ public class InsuranceManager {
 		return data;
 	}
 	
+	//show all insurances names for table
+		public String[] ShowInsurancesNames( ) throws SQLException {
+			Object[][] data = null;
+			Session session = factory.openSession();
+			Transaction tx = null;
+			ArrayList<String> names=new ArrayList<String>();
+			try{
+				tx = session.beginTransaction();
+				
+     			String hql = "SELECT E.type FROM Insurance E";
+     			Query query = session.createQuery(hql);
+     			List results = query.list();
+     			Iterator itr = results.iterator();
+    			while (itr.hasNext()) {
+    				String emp = (String) itr.next();
+    				names.add(emp);
+    				
+    			}
+				tx.commit();
+
+
+			}catch (HibernateException e) {
+				if (tx!=null) tx.rollback();
+				e.printStackTrace(); 
+			}finally {
+				session.close(); 
+			}
+			String Names[]=new String[names.size()];
+			for(int i=0;i<names.size();i++){
+				Names[i]=names.get(i);
+			}
+			return Names;
+		}
 	
+	//inserting a new Insurance
+	public boolean insertInsurance(Insurance CC){
+		boolean is_exist=false;
+		Session session = factory.openSession();
+		Transaction tx = null;
+
+		try{
+			tx = session.beginTransaction();
+			if(session.get(Insurance.class, CC.getId())==null){
+			session.save(CC); 
+			System.out.println("successfully saved"); 
+			is_exist=true;
+			tx.commit();
+			}
+			
+		}catch (HibernateException e) {
+			if (tx!=null) tx.rollback();
+			e.printStackTrace(); 
+		}finally {
+			session.close(); 
+		}
+		return is_exist;
+
+	}
+
+
+
+	//delete one Insurance
+	public boolean deleteOneInsurance(int id) throws SQLException{
+
+		boolean is_exist=false;
+		Session session = factory.openSession();
+		Transaction tx = null;
+		Insurance ticket;
+		try{
+			tx = session.beginTransaction();
+			ticket=new Insurance();
+			ticket=	session.get(Insurance.class, id);
+
+			if(	ticket!=null){
+
+				session.delete(ticket); 
+				is_exist=true;
+				System.out.println("successfully deleted");
+			}
+			tx.commit();
+		}catch (HibernateException e) {
+			if (tx!=null) tx.rollback();
+			e.printStackTrace(); 
+		}finally {
+			session.close(); 
+		}
+		return is_exist;
+	}
+
+	//update one Insurance
+	public boolean uodateOneInsurance(Insurance t) throws SQLException{
+
+		boolean is_exist=false;
+		Session session = factory.openSession();
+		Transaction tx = null;
+		Insurance insurance;
+		try{
+			tx = session.beginTransaction();
+			insurance=new Insurance();
+			int id=t.getId();
+			insurance=	session.get(Insurance.class, id);
+
+			if(	insurance!=null){
+				insurance.setType(t.getType());
+				session.update(insurance);
+				is_exist=true;
+				System.out.println("successfully update"); 
+
+			}
+			tx.commit();
+		}catch (HibernateException e) {
+			if (tx!=null) tx.rollback();
+			e.printStackTrace(); 
+		}finally {
+			session.close(); 
+		}
+		return is_exist;
+	}
+
+
+
 
 }
 

@@ -18,6 +18,7 @@ import org.hibernate.cfg.Configuration;
 import javaClass.Drog;
 import javaClass.Insurance;
 import javaClass.Patient;
+import javaClass.SaleDrug;
 
 
 public class PatientManager {
@@ -104,7 +105,7 @@ public class PatientManager {
 	//		}
 	//	
 	//inserting a new Patient
-	public boolean insertPateint(Integer id,String name,String family,String date,String InsuranceType){
+	public boolean insertPateint(Integer id,String name,String family,java.sql.Date  date,String InsuranceType){
 		boolean is_exist=false;
 		Session session = factory.openSession();
 		Transaction tx = null;
@@ -195,7 +196,72 @@ public class PatientManager {
 	//		return is_exist;
 	//	}
 
-
+	//show all SaleFullDrug Drugs
+//	public Object [][] ShowSaleFullDrugs( java.sql.Date sqlDateStart,java.sql.Date sqlDatefinish ) throws SQLException {
+//		Object[][] data = null;
+//		Session session = factory.openSession();
+//		Transaction tx = null;
+//		ArrayList<SaleDrug> saledrogs=new ArrayList<SaleDrug>();
+//		try{
+//			tx = session.beginTransaction();
+//
+//
+//
+//
+//
+//			Query query2 = session.createQuery("SELECT * "
+//					+ "FROM Patient E 	WHERE E.date >= '" +sqlDateStart+ "' AND E.date< '"+sqlDatefinish+"'"
+//					+ "group by E.drog");
+//			Query query=session.createQuery(arg0)
+//			List tickets2 = criteria.list();
+//			Iterator itr = tickets2.iterator();
+//			while (itr.hasNext()) {
+//				Drog emp = (Drog) itr.next();
+//				drogs.add(emp);
+//			}
+//			tx.commit();
+//
+//			data =new Object[drogs.size()][4];
+//			for(int i=0;i<drogs.size();i++){
+//				data[i][0]=drogs.get(i).getId();
+//				data[i][1]=drogs.get(i).getName();
+//				data[i][2]=drogs.get(i).getInventory();
+//				data[i][3]=drogs.get(i).getPrice();
+//
+//			}
+//			
+////			Query query2 = session.createQuery("SELECT * "
+////					+ "FROM Patient E 	WHERE E.date >= '1396-06-01' AND E.date< '1396-06-31'"
+////					+ "group by E.drog");
+////			
+////			System.out.println(drugs.size());
+////			System.out.println(drugs.get(0).getName());
+////			System.out.println(sales.get(0));
+////			tx.commit();
+////
+////			data =new Object[drugs.size()][5];
+////						for(int i=0;i<drugs.size();i++){
+////							data[i][0]=drugs.get(i).getId();
+////							data[i][1]=drugs.get(i).getName();
+////							data[i][2]=drugs.get(i).getInventory();
+////							data[i][3]=drugs.get(i).getPrice();
+////							data[i][4]=sales.get(i);
+////			
+////						}
+////			
+//
+//			tx.commit();
+//
+//
+//
+//		}catch (HibernateException e) {
+//			if (tx!=null) tx.rollback();
+//			e.printStackTrace(); 
+//		}finally {
+//			session.close(); 
+//		}
+//		return data;
+//	}	
 
 
 }

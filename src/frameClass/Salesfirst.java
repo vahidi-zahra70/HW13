@@ -14,14 +14,23 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import HibernateManager.DrogManager;
 import HibernateManager.InsuranceManager;
 import HibernateManager.PatientDrugManager;
 import HibernateManager.PatientManager;
+import HibernateManager.SaleDrugManager;
+import javaClass.Drog;
 import javaClass.Insurance;
+import javaClass.Patient;
 
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Salesfirst extends JFrame {
 
@@ -36,13 +45,15 @@ public class Salesfirst extends JFrame {
 	private JTextField textField_9;
 	private JTextField textField_10;
 	private JTextField textField_5;
+	SalesSecond salesSecond ;
+
 
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
+	EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					Salesfirst frame = new Salesfirst();
@@ -59,6 +70,9 @@ public class Salesfirst extends JFrame {
 	 * @throws SQLException 
 	 */
 	public Salesfirst() throws SQLException {
+
+
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1200, 700);
 		contentPane = new JPanel();
@@ -71,7 +85,22 @@ public class Salesfirst extends JFrame {
 		JLabel label = new JLabel("\u062B\u0628\u062A \u0627\u0637\u0627\u0639\u0627\u062A \u0647\u0645\u0631\u0627\u0647 \u062F\u0641\u062A\u0631\u0686\u0647 \u0628\u06CC\u0645\u0647 ");
 		label.setBounds(158, 59, 239, 14);
 		contentPane.add(label);
+		
+		
+		//Show drugs
 		JButton button = new JButton("\u06A9\u0627\u0631\u062A\u0627\u0628\u0644 \u062F\u0627\u0631\u0648 \u0647\u0627 \u0648 \u063A\u06CC\u0631\u0647 ");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try{
+					SalesSecond salesSecond = new SalesSecond ();
+					salesSecond.setVisible(true);
+				}
+				catch (Exception e2) {
+					e2.printStackTrace();
+				}
+				
+			}
+		});
 		button.setBounds(744, 25, 131, 23);
 		contentPane.add(button);
 
@@ -84,8 +113,13 @@ public class Salesfirst extends JFrame {
 
 
 
-
+		//Show Patients
 		JButton button_1 = new JButton("\u06A9\u0627\u0631\u062A\u0627\u0628\u0644 \u0628\u06CC\u0645\u0627\u0631\u0627\u0646");
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		button_1.setBounds(500, 25, 117, 23);
 		contentPane.add(button_1);
 
@@ -116,23 +150,23 @@ public class Salesfirst extends JFrame {
 		textField_1.setColumns(10);
 
 
-		JComboBox comboBox = new JComboBox();
-		//		Integer [] a2 = new Integer []{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31};
-		//		JComboBox<Integer> comboBox = new JComboBox<Integer>(a2);
+		//JComboBox comboBox = new JComboBox();
+		Integer [] a2 = new Integer []{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31};
+		JComboBox<Integer> comboBox = new JComboBox<Integer>(a2);
 		comboBox.setBounds(239, 176, 45, 20);
 		contentPane.add(comboBox);
 
 		//month Patient
-		JComboBox comboBox_1 = new JComboBox();
-		//		String [] m2 = new String[]{"\u0641\u0631\u0648\u0631\u062F\u06CC\u0646","\u0627\u0631\u062F\u06CC\u0628\u0647\u0634\u062A","\u062E\u0631\u062F\u0627\u062F","\u062A\u06CC\u0631","\u0645\u0631\u062F\u0627\u062F","\u0634\u0647\u0631\u06CC\u0648\u0631","\u0645\u0647\u0631","\u0622\u0628\u0627\u0646","\u0622\u0630\u0631","\u062F\u06CC","\u0628\u0647\u0645\u0646","\u0627\u0633\u0641\u0646\u062F"};
-		//		JComboBox<String> comboBox_1 = new JComboBox<String>(m2);
+		//JComboBox comboBox_1 = new JComboBox();
+		String [] m2 = new String[]{"\u0641\u0631\u0648\u0631\u062F\u06CC\u0646","\u0627\u0631\u062F\u06CC\u0628\u0647\u0634\u062A","\u062E\u0631\u062F\u0627\u062F","\u062A\u06CC\u0631","\u0645\u0631\u062F\u0627\u062F","\u0634\u0647\u0631\u06CC\u0648\u0631","\u0645\u0647\u0631","\u0622\u0628\u0627\u0646","\u0622\u0630\u0631","\u062F\u06CC","\u0628\u0647\u0645\u0646","\u0627\u0633\u0641\u0646\u062F"};
+		JComboBox<String> comboBox_1 = new JComboBox<String>(m2);
 		comboBox_1.setBounds(176, 176, 60, 20);
 		contentPane.add(comboBox_1);
 
 		//year
-		JComboBox comboBox_2 = new JComboBox();
-		//		Integer y2[] =new Integer[]{1390,1391,1392,1393,1394,1395,1396};
-		//		JComboBox<Integer> comboBox_2 = new JComboBox<Integer>(y2);
+		//JComboBox comboBox_2 = new JComboBox();
+		Integer y2[] =new Integer[]{1390,1391,1392,1393,1394,1395,1396};
+		JComboBox<Integer> comboBox_2 = new JComboBox<Integer>(y2);
 		comboBox_2.setBounds(106, 176, 60, 20);
 		contentPane.add(comboBox_2);
 
@@ -149,13 +183,13 @@ public class Salesfirst extends JFrame {
 		contentPane.add(label_7);
 
 		//Getting Insurances names from database
-		JComboBox comboBox_3 = new JComboBox();
+		//JComboBox comboBox_3 = new JComboBox();
 		InsuranceManager MM=new InsuranceManager ();
 
 		String b[]=MM.ShowInsurancesNames();
 
-		//		JComboBox<String> comboBox_3 = new JComboBox<String>(b);
-		//		comboBox_3.setBounds(158, 218, 120, 20);
+		JComboBox<String> comboBox_3 = new JComboBox<String>(b);
+		comboBox_3.setBounds(158, 218, 120, 20);
 		contentPane.add(comboBox_3);
 
 		JLabel label_8 = new JLabel("\u0645\u0634\u062E\u0635\u0627\u062A \u062F\u0627\u0631\u0648\u06CC \u0628\u06CC\u0645\u0627\u0631 :");
@@ -223,25 +257,25 @@ public class Salesfirst extends JFrame {
 
 
 		//day
-		JComboBox comboBox_4 = new JComboBox();
-		//		Integer [] a = new Integer []{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31};
-		//		JComboBox <Integer> comboBox_4 = new JComboBox<Integer>(a);
+		//JComboBox comboBox_4 = new JComboBox();
+		Integer [] a = new Integer []{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31};
+		JComboBox <Integer> comboBox_4 = new JComboBox<Integer>(a);
 		comboBox_4.setBounds(675, 249, 45, 20);
 		contentPane.add(comboBox_4);
 
 
 		//month
-		JComboBox comboBox_5 = new JComboBox();
-		//		String [] m = new String[]{"\u0641\u0631\u0648\u0631\u062F\u06CC\u0646","\u0627\u0631\u062F\u06CC\u0628\u0647\u0634\u062A","\u062E\u0631\u062F\u0627\u062F","\u062A\u06CC\u0631","\u0645\u0631\u062F\u0627\u062F","\u0634\u0647\u0631\u06CC\u0648\u0631","\u0645\u0647\u0631","\u0622\u0628\u0627\u0646","\u0622\u0630\u0631","\u062F\u06CC","\u0628\u0647\u0645\u0646","\u0627\u0633\u0641\u0646\u062F"};
-		//		JComboBox<String> comboBox_5 = new JComboBox<String>(m);
+		//JComboBox comboBox_5 = new JComboBox();
+		String [] m = new String[]{"\u0641\u0631\u0648\u0631\u062F\u06CC\u0646","\u0627\u0631\u062F\u06CC\u0628\u0647\u0634\u062A","\u062E\u0631\u062F\u0627\u062F","\u062A\u06CC\u0631","\u0645\u0631\u062F\u0627\u062F","\u0634\u0647\u0631\u06CC\u0648\u0631","\u0645\u0647\u0631","\u0622\u0628\u0627\u0646","\u0622\u0630\u0631","\u062F\u06CC","\u0628\u0647\u0645\u0646","\u0627\u0633\u0641\u0646\u062F"};
+		JComboBox<String> comboBox_5 = new JComboBox<String>(m);
 		comboBox_5.setBounds(589, 249, 60, 20);
 		contentPane.add(comboBox_5);
 
 
 		//year
-		JComboBox comboBox_6 = new JComboBox();
-		//		Integer y[] =new Integer[]{1390,1391,1392,1393,1394,1395,1396}; 
-		//		JComboBox<Integer> comboBox_6 = new JComboBox<Integer>(y);
+		//JComboBox comboBox_6 = new JComboBox();
+		Integer y[] =new Integer[]{1390,1391,1392,1393,1394,1395,1396}; 
+		JComboBox<Integer> comboBox_6 = new JComboBox<Integer>(y);
 		comboBox_6.setBounds(497, 246, 60, 20);
 		contentPane.add(comboBox_6);
 
@@ -295,6 +329,8 @@ public class Salesfirst extends JFrame {
 				}
 				else{
 					try {
+						String date;
+						java.sql.Date sqlDate = null;
 						Integer id=Integer.parseInt(textField_10.getText());
 						String name=textField.getText();
 						String family=textField_1.getText();
@@ -302,11 +338,30 @@ public class Salesfirst extends JFrame {
 						int month =comboBox_1.getSelectedIndex()+1;
 						Integer year =(Integer) comboBox_2.getItemAt(comboBox_2.getSelectedIndex());
 						String InsuranceType =(String) comboBox_3.getItemAt(comboBox_3.getSelectedIndex());
-						String date=year+"/"+month+"/"+day;
+						if(day<=9 && month>=10){
+							date=year+"/"+month+"/0"+day;
+						}
+						else if(day>=10 && month<=9){
+							date=year+"/0"+month+"/"+day;
+						}
+						else if(day<=9 && month<=9){
+							date=year+"/0"+month+"/0"+day;
+						}
+						else{
+							date=year+"/"+month+"/"+day;
+						}
+						SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
 
+						try {
+							java.util.Date utilDate = format.parse(date);
+							sqlDate = new java.sql.Date(utilDate.getTime());
+							System.out.println(sqlDate);
+						} catch (Exception e2) {
+							e2.printStackTrace();
+						}
 
 						PatientManager II=new PatientManager();
-						if(!II.insertPateint(id, name, family, date, InsuranceType)){
+						if(!II.insertPateint(id, name, family, sqlDate, InsuranceType)){
 							JOptionPane.showMessageDialog(contentPane, "The Patient you want to insert exist in the table!");
 						}
 						textField.setText("");
@@ -342,9 +397,17 @@ public class Salesfirst extends JFrame {
 						if(!II.insertPateintDrug(PatientID, DrugID, quantity)){
 							JOptionPane.showMessageDialog(contentPane, "The field can not be inserted!");
 						}
+						else{
+							DrogManager II2=new DrogManager();
+							if(!II2.updateInventoryDrug(DrugID,quantity)){
+								JOptionPane.showMessageDialog(contentPane, "The inventory of  this drug is not enough for your request!");	
+							}
+
+						}
 						textField_2.setText("");
 						textField_3.setText("");
 						textField_4.setText("");
+
 					} catch (Exception e1) {
 						e1.printStackTrace();
 						JOptionPane.showMessageDialog(contentPane, "Insert a number as the Patient Id and Drug ID and Quantity of drug!");
@@ -388,7 +451,7 @@ public class Salesfirst extends JFrame {
 						}
 						else{
 							label_13.setText(Integer.toString(II.totalCostPateintDrug(PatientID)));
-							
+
 						}
 						textField_5.setText("");
 
@@ -403,6 +466,74 @@ public class Salesfirst extends JFrame {
 		});
 		button_4.setBounds(968, 325, 160, 23);
 		contentPane.add(button_4);
+
+
+		//inserting a SaleDrug
+		JButton button_5 = new JButton("\u062A\u0627\u06CC\u06CC\u062F");
+		button_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				if(textField_7.getText().equals("") || textField_8.getText().equals("")){
+					JOptionPane.showMessageDialog(contentPane, "Please insert the DrugID and qunatity for inserting a drug!");
+				}
+				else{
+					try {
+						java.sql.Date sqlDate = null;
+						String date;
+						Integer  DrugID=Integer.parseInt(textField_7.getText());
+						Integer quantity=Integer.parseInt(textField_8.getText());
+						Integer day =(Integer) comboBox_4.getItemAt(comboBox_4.getSelectedIndex());
+						int month =comboBox_5.getSelectedIndex()+1;
+						Integer year =(Integer) comboBox_6.getItemAt(comboBox_6.getSelectedIndex());
+						if(day<=9 && month>=10){
+							date=year+"/"+month+"/0"+day;
+						}
+						else if(day>=10 && month<=9){
+							date=year+"/0"+month+"/"+day;
+						}
+						else if(day<=9 && month<=9){
+							date=year+"/0"+month+"/0"+day;
+						}
+						else{
+							date=year+"/"+month+"/"+day;
+						}
+						SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+
+						try {
+							java.util.Date utilDate = format.parse(date);
+							sqlDate = new java.sql.Date(utilDate.getTime());
+							System.out.println(sqlDate);
+						} catch (Exception e2) {
+							e2.printStackTrace();
+						}
+
+						SaleDrugManager  II=new SaleDrugManager ();
+						if(!II.insertSaleDrug(DrugID, quantity, sqlDate)){
+							JOptionPane.showMessageDialog(contentPane, "The field can not be inserted!");
+
+						}
+						else{
+							
+							DrogManager II2=new DrogManager();
+							if(!II2.updateInventoryDrug(DrugID,quantity)){
+								JOptionPane.showMessageDialog(contentPane, "The inventory of  this drug is not enough for your request!");	
+
+							};
+						}
+						textField_7.setText("");
+						textField_8.setText("");
+
+
+					} catch (Exception e1) {
+						e1.printStackTrace();
+						JOptionPane.showMessageDialog(contentPane, "Insert a number as the Drug ID and Quantity of drug!");
+					} 
+				}	
+
+			}
+		});
+		button_5.setBounds(577, 293, 117, 23);
+		contentPane.add(button_5);
 
 
 
